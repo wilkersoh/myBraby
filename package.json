@@ -1,0 +1,25 @@
+{
+  "name": "webdevnodejs",
+  "version": "1.0.0",
+  "description": "april 16",
+  "main": "index.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express-ejs-layouts": "^2.5.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wilkersoh/myBraby.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wilkersoh/myBraby/issues"
+  },
+  "homepage": "https://github.com/wilkersoh/myBraby#readme"
+}
