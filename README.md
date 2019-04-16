@@ -22,3 +22,12 @@ console.log(process.env.TOKEN) //不能读取到 除非你有通过dotenv.config
 
 ```
 <p>在heroku app，通过setting里的设置连接这个env和mongoose的key</p>
+
+--------
+
+<p>req.body.name</p>
+<p>name来自input里的name value</p>
+<p>searchOptions.name是 render里的第二参数资料</p>
+``` ejs
+<input type="text" name="name" value="<%= searchOptions.name %>"
+```
