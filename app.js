@@ -27,7 +27,7 @@ app.use(expressLayouts);
 app.use(express.static('public'));
 
 // Routes
-app.use('/', require('./routes/index'));
+app.use('/', require('./routes/index'));  
 
 
 app.listen(process.env.PORT || 3000);
