@@ -1,0 +1,22 @@
+<h2>Search Book</h2>
+<form action="/books" method="GET">
+    <div>
+        <label>Title</label>
+        <!-- 显示被create的 资料 从get那边取到资料 -->
+        <input type="text" name="name" value="<%= searchOptions.name %>">
+    </div>
+    <div>
+        <label>Published After</label>
+        <input type="date" name="publishedAfter" value="<%= searchOptions.publishedAfter %>">
+    </div>
+    <div>
+        <label>Published Before</label>
+        <input type="date" name="publishedBefore" value="<%= searchOptions.publishedBefore %>">
+    </div>
+        <button type="submit">Search</button>
+</form>
+<br>
+<!-- 显示被create的 资料 从get那边取到资料 -->
+<% books.forEach(book => { %>
+    <img height="150" width="100"src="<%= book.coverImagePath %>" alt="">
+<% }) %>
