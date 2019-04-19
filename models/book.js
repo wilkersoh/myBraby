@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const path = require('path');
-const coverImageBasePath = 'uploads/bookCovers';
+
 
 const bookSchema = new mongoose.Schema({
     title: {
@@ -23,9 +22,13 @@ const bookSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    coverImageName: {
-       type: String,
+    coverImage: {
+       type: Buffer,
        required: true, 
+    },
+    coverImageType: {
+        type: String,
+        required: true
     },
     author: {
         // type 是一个reference 对象另一个Schema的id 他们id会相同
@@ -37,10 +40,10 @@ const bookSchema = new mongoose.Schema({
 })
 
 bookSchema.virtual('coverImagePath').get(function() {
-    if(this.coverImageName != null){
-        return path.join('/', coverImageBasePath, this.coverImageName);
+    if(this.coverImage != null && this.coverImageType != null){
+        // 接受file的 json buffer 然后转换去 读的懂得code
+        return `data: ${this.coverImageType};charset=utf-8;base64, ${this.coverImage.toString('base64')}`
     }
 })
 
 module.exports = mongoose.model('Book', bookSchema);
-module.exports.coverImageBasePath = coverImageBasePath;

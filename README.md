@@ -6,6 +6,7 @@
 * enctype="multipart/form-data" html tag
 * multer npm插件 确保上传的文件符合要求 看下面代码
 * schema.virtual('xx')
+* FilePond 
 
 
 #### env 是一个环境变量
@@ -98,21 +99,51 @@ const upload = multer({
 ```
 
 ### virtual()
-``` javascript
-const UsersSchema = new Schema({   
-  ...   
-  address: {   
-    city: {type: String},   
-    street: {type: String}   
-  }  
-}, {collection: 'users'});
-```
+<p>可以设置虚拟属性，但这属性不会保存到数据库里。</p>
+<p>比如，前台传到后台一个参数name，代表用户的名称，但是数据库保存的是两个字段，姓和名，这就可以用虚拟属性</p>
 
 ``` javascript
-const address = UsersSchema.virtual('address.full');   
 
-
-address.get(function () {   
-  return this.address.city + ' ' + this.address.street;  
+var schema = new Schema({
+    name: {
+        first: { 'type': String },  
+        last: { 'type': String },
+      }
 });
+
+// 当获取该 schema 的fullname属性时,将 schema 中的 name.first 和 name.last 拼接起来返回
+var virtual = schema.virtual('fullname');
+virtual.get(function () {
+  return this.name.first + ' ' + this.name.last;
+});
+// 当设置该schema的 fullname 属性时,将设置的字以空格分开,分别赋值给 schema 中的 name.first 和 name.last 属性
+var virtual = schema.virtual('fullname');
+virtual.set(function (v) {
+  var parts = v.split(' ');
+  this.name.first = parts[0];
+  this.name.last = parts[1];
+});
+
+// 将该 schema 保存到数据库中时,只会保存 name.first 和 name.last
+// fullname属性的值不会保存到数据库中,这就是virtual
 ```
+
+### FilePond 更改上传的还有一些resize
+<p>设置好后需要在用到的地方设置 class="filepond"</p>
+
+``` javascript
+ <input type="file" name="cover" class="filepond">
+```
+<p>stylePanelAspectRatio我也搞不太清楚第一个 150 和 100 是什么。 关系到 cover的大小</p>
+<p>使用FilePond后 ，他不再是通过file object send to server了， 他是通过json了</p>
+<p>有什么差别呢，之前如果要save cover照片下来需要去购买一些空间，通过json后就不必了，它是数据格式了</p>
+
+``` javascript
+
+FilePond.setOptions({
+  stylePanelAspectRatio: 150 / 100,
+  imageResizeTargetWidth: 100,
+  imageResizeTargetHeight: 150
+})
+```
+<p>通过json格式发送file文件，之前的multer npm module 还有大量的code都被取代/p>
