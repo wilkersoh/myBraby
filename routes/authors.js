@@ -1,5 +1,6 @@
 const express = require('express');
 const Author = require('../models/author');
+const Books = require('../models/book')
 
 const router = express.Router();
 
@@ -38,26 +39,82 @@ router.post('/', async (req, res) => {
     })
     try {
         const newAuthor = await author.save()
-        // res.redirect(`authors/${newAuthor.id}`)
-        res.redirect(`authors`);
+        res.redirect(`authors/${newAuthor.id}`)
     } catch {
         res.render('authors/new', {
             author: author,
             errorMessage: 'Error creating Author'
         })
     }
+})
 
-    // author.save((err, newAuthor) => {
-    //     if(err){
-    //         res.render('authors/new', {
-    //             author: author,
-    //             errorMessage: 'Error creating Author'
-    //         })
-    //     } else {
-    //         // res.redirect(`authors/${newAuthor.id}`)
-    //         res.redirect(`authors`);
-    //     }
-    // })
+// CRUD , put and delete method install method-override
+router.get('/:id', async (req, res) => {
+    try {
+        const author = await Author.findById(req.params.id)
+        const books = await Books.find({ author: author.id}).limit(6).exec();
+        res.render('authors/show', {
+            author: author,
+            booksByAuthor: books
+        })
+    } catch (e){
+        console.log(e)
+        res.redirect('/')
+    }
+})
+
+// 点击Edit button 
+router.get('/:id/edit', async (req, res) => {
+    try{
+        // 寻找url  .id的 
+        const author = await Author.findById(req.params.id);
+        res.render('authors/edit', {
+            author: author
+        })
+    } catch {
+        res.redirect('/authors')
+    }
+
+})
+
+// 更新 - 当点击update button 实现这个
+router.put('/:id', async (req, res) => {
+    let author;
+    try {
+        // 找url里的 id 在 database 
+        author = await Author.findById(req.params.id)
+        // form name里写的 资料 
+        author.name = req.body.name;
+        // 储存进database 更新了
+        await author.save()
+        res.redirect(`/authors/${author.id}`)
+  
+    } catch {
+        if(author == null){
+            res.redirect('/');
+        } else {
+            res.render('authors/new', {
+                author: author,
+                errorMessage: 'Error UpdatingAuthor'
+            })
+        }
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    let author;
+    try {
+        // 找url里的 id 在 database 
+        author = await Author.findById(req.params.id)
+        await author.remove()
+        res.redirect(`/authors`)
+    } catch {
+        if(author == null){
+            res.redirect('/');
+        } else {
+            res.redirect(`/authors/${author.id}`)
+        }
+    }
 })
 
 module.exports = router

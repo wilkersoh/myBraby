@@ -9,4 +9,12 @@
 <!-- 显示被create的 资料 从get那边取到资料 -->
 <% authors.forEach(author => { %>
     <div><%= author.name %></div>
+    <a href="/authors/<%= author.id %>">View</a>
+    <a href="/authors/<%= author.id %>/edit">Edit</a>
+    <!-- Delelete 不能使用a tag link google会delete全部 -->
+    <!-- 里面使用${} 而不是 ejs 因为这个是在server里跑 -->
+    <%- include('../partials/deleteForm', 
+                { url: `/authors/${author.id}` }) 
+    %>
+
 <% }) %>

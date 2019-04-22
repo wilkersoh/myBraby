@@ -15,8 +15,9 @@
     </div>
         <button type="submit">Search</button>
 </form>
-<br>
-<!-- 显示被create的 资料 从get那边取到资料 -->
-<% books.forEach(book => { %>
-    <img height="150" width="100"src="<%= book.coverImagePath %>">
-<% }) %>
+<div>
+    <!-- 显示被create的 资料 从get那边取到资料 -->
+    <% books.forEach(book => { %>
+        <img height="150" width="100"src="<%= book.coverImagePath %>">
+    <% }) %>
+</div>

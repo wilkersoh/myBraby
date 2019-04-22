@@ -1,4 +1,5 @@
 ### Brary-HerokuServer
+npm run dev - developmentMode
 *Project learn from online. Not created by me.
 * env
 * locals
@@ -7,6 +8,15 @@
 * multer npm插件 确保上传的文件符合要求 看下面代码
 * schema.virtual('xx')
 * FilePond 
+* method-override 能够使用put和delete for CRUD
+
+#### EJS 快速班
+
+``` javascript
+<%= value from render %>
+<%- include('url') %>
+<% pure js code %> 
+```
 
 
 #### env 是一个环境变量
