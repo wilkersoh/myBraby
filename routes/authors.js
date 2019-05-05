@@ -31,7 +31,7 @@ router.get('/new', (req, res) => {
     })
 })
 
-// Create author route
+// Create author route  /authors/
 router.post('/', async (req, res) => {
     const author = new Author({
         // 发数据 给database
@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
 })
 
 // CRUD , put and delete method install method-override
+// Show author 当点击 view
 router.get('/:id', async (req, res) => {
     try {
         const author = await Author.findById(req.params.id)
@@ -57,8 +58,7 @@ router.get('/:id', async (req, res) => {
             author: author,
             booksByAuthor: books
         })
-    } catch (e){
-        console.log(e)
+    } catch{
         res.redirect('/')
     }
 })
@@ -78,7 +78,7 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 // 更新 - 当点击update button 实现这个
-router.put('/:id', async (req, res) => {
+router.put('/:id/edit', async (req, res) => {
     let author;
     try {
         // 找url里的 id 在 database 

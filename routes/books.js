@@ -62,14 +62,89 @@ router.post('/', async (req, res) => {
         
     try{
         const newBook = await book.save();
-        // res.redirect(`books/${newBook.id}`);
-        res.redirect('books');
+        res.redirect(`/books/${newBook.id}`);
     } catch {
         renderNewPage(res, book, true)
     }
-}) 
+});
+
+
+// 点击book 然后去转跳进去
+router.get('/:id', async (req, res) => {
+    try {
+        // 通过 点击a tag找到这个book的 资料，populate是连接也能得到author Schema里的资料
+        const book = await Book.findById(req.params.id).populate('author').exec();
+        // 转跳进来shows.ejs 然后book里有连接 book 和 author资料
+        res.render('books/shows', { book: book })
+    } catch {
+        res.redirect('/')
+    }
+})
+
+// Edit book route
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id)
+        // res is for render page , look below
+        renderEditPage(res, book);
+    } catch {
+        res.redirect('/')
+    }
+})
+
+// Update Book Route(PUT)
+router.put('/:id', async (req, res) => {
+    let book;
+    try{
+        // 进入 edit页面 submit form 就会来到这里
+        book = await Book.findById(req.params.id);
+        book.title = req.body.title
+        book.author = req.body.author
+        book.publishDate = new Date(req.body.publishDate)
+        book.pageCount = req.body.pageCount
+        book.description = req.body.description
+        if(req.body.cover != null && req.body.cover !== ''){
+            saveCover(book, req.body.cover);
+        }
+        await book.save();
+        res.redirect(`/books/${book.id}`);
+    } catch {
+        if(book != null){
+            renderEditPage(res, book, true)
+        } else {
+            redirect('/')
+        }
+    }
+});
+
+// 删除 book~~
+router.delete('/:id', async (req, res) => {
+    let book;
+    try{
+        book = await Book.findById(req.params.id)
+        await book.remove()
+        res.redirect('/books');
+    } catch {
+        if(book != null){
+            res.render('books/show', {
+                book: book,
+                errorMessage: 'Could not remove book'
+            })
+        } else {
+            res.redirect('/')
+        }
+    }
+})
 
 async function renderNewPage(res, book, hasError = false){
+    renderFormPage(res, book, 'new', hasError)
+}
+
+async function renderEditPage(res, book, hasError = false){
+    renderFormPage(res, book, 'edit', hasError)
+}
+
+async function renderFormPage(res, book, form, hasError = false){
 
     try {
         // 传去 _form那边
@@ -78,8 +153,16 @@ async function renderNewPage(res, book, hasError = false){
            authors: authors,
            book: book
        }
-        res.render('books/new', params)
+       if(hasError){
+           if(form === 'edit'){
+               params.errorMessage = 'Error Updating Book'
+           } else {
+               params.errorMessage = 'Error Create Book'
+           }
+       }
         if(hasError) params.errorMessage = "Error Creating Book"
+        // send those data to page from params
+        res.render(`books/${form}`, params)
     } catch {
         res.redirect('/books');
     }
