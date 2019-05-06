@@ -12,12 +12,17 @@
     <!-- this must be last -->
     <script defer src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script defer src="/javascripts/fileUploader.js"></script>
+    <link rel="stylesheet" href="/stylesheets/main.css" tpye="text/css">
     <title>NodeJs MongoDB</title>
 </head> 
 <body>
-    <%- include('../partials/header.ejs') %>
-    <%- include('../partials/errormessage.ejs') %>
-    <%- body %>
+    <div class="container">
+        <%- include('../partials/header.ejs') %>
+        <div class="inner-container">
+            <%- include('../partials/errormessage.ejs') %>
+            <%- body %>
+        </div>
+    </div>
     
 </body>
 </html>
