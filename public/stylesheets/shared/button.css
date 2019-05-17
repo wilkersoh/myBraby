@@ -19,3 +19,8 @@
     color: var(--color-btn-primary-text);
     background-color: var(--color-btn-primary-background)
 }
+
+.form-row-end a {
+    color:white;
+    background-color:red;
+}
